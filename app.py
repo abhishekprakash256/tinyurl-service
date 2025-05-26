@@ -5,7 +5,7 @@ The application uses redis to store the mapping between the short hashes and the
 
 """
 
-#from flask import Flask,request, jsonify, send_from_directory, abort
+from flask import Flask,request, jsonify , redirect , url_for
 from redis_helper_kit import Helper_fun
 from hash_utils import generate_unique_hash
 
@@ -20,24 +20,77 @@ HASH_NAME = 'tiny_url_hash'
 
 
 
+#make the submission route 
+app = Flask(__name__)
 
 
-#make the redis instance
-redis_helper = Helper_fun(host_name = REDIS_HOST)
+@app.route('/')
+def index():
+    """
+    Endpoint to check if the service is running.
+    """
+    return "<h1>Welcome to the TinyURL Service! Use /tinyurl/submit to create a short URL.</h1>", 200
 
-# generate a unique hash to store in the redis 
-generate_unique_hash(PRIMARY_SET, SECONDRY_SET, REDIS_HOST, 5, 10, 100)   #min length 5, max length 10, 100 hashes
 
-#pop the hash from the redis set
-hash_val = redis_helper.pop_set_val(PRIMARY_SET)
 
-print("hash_val: ", hash_val)
 
-#add the hash and the url to redis
-redis_helper.add_value_to_hash(hash_val, "www.meabhi.me" , HASH_NAME)
+@app.route('/tinyurl/<hash_val>', methods=['GET'])
+def get_original_url(hash_val):
+    """
+    Endpoint to retrieve the original URL using the short hash.
+    """
+    #make the instance for the redis helper
+    redis_helper = Helper_fun(host_name = REDIS_HOST)
 
-#get the value from the hash
-url = redis_helper.get_hash_value(hash_val , HASH_NAME)
+    #get the url from the hash
+    url = redis_helper.get_hash_value(hash_val, HASH_NAME)
 
-print("url: ", url)
+    if not url:
+        return jsonify({"error": "URL not found"}), 404
+    
+    #redirect to the original URL
+    return redirect(url, code=302)
 
+
+
+
+
+@app.route('/tinyurl/submit', methods=['POST'])
+def submit_url():
+    """
+    Endpoint to submit a URL and get a short hash.
+    """
+    data = request.get_json()
+    url = data.get('url')
+    
+    if not url:
+        return jsonify({"error": "URL is required"}), 400
+    
+    # Generate a unique hash
+    generate_unique_hash(PRIMARY_SET, SECONDRY_SET, REDIS_HOST, 5, 10, 100)
+
+    #make the instance for the redis helper
+    redis_helper = Helper_fun(host_name = REDIS_HOST)
+
+    #pop the hash from the redis set
+    hash_val = redis_helper.pop_set_val(PRIMARY_SET)
+    
+    # Store the URL in the hash
+    redis_helper.add_value_to_hash(hash_val, url, HASH_NAME)
+
+    #add the hash to the secondary set
+    redis_helper.add_value_to_set(hash_val, SECONDRY_SET)
+    
+    return jsonify({"tinyurl" : "https://meabhi.me/tinyurl/" + hash_val}), 201
+
+
+
+
+if __name__ == '__main__':
+    """
+    Starts the Flask application server for local development.
+
+    This is only used when running the app directly and is not required in a production environment.
+    The server listens on all available interfaces (0.0.0.0) and uses port 5050.
+    """
+    app.run(debug=True, host='0.0.0.0', port=5050)
