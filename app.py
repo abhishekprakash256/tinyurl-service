@@ -34,7 +34,7 @@ def index():
 
 
 
-@app.route('/tu/<hash_val>', methods=['GET'])
+@app.route('/tu/<hash_val>', methods=['GET'])  
 def get_original_url(hash_val):
     """
     Endpoint to retrieve the original URL using the short hash.
