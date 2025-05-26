@@ -29,7 +29,7 @@ def index():
     """
     Endpoint to check if the service is running.
     """
-    return "<h1>Welcome to the TinyURL Service! Use /tinyurl/submit to create a short URL.</h1>", 200
+    return "<h1>Welcome to the TinyURL Service! Use /tu/submit to create a short URL.</h1>", 200
 
 
 
@@ -59,6 +59,7 @@ def get_original_url(hash_val):
 def submit_url():
     """
     Endpoint to submit a URL and get a short hash.
+    I have to pass the htps://url.com in the frontend
     """
     data = request.get_json()
     url = data.get('url')
