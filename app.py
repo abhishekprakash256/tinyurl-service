@@ -34,7 +34,7 @@ def index():
 
 
 
-@app.route('/tinyurl/<hash_val>', methods=['GET'])
+@app.route('/tu/<hash_val>', methods=['GET'])
 def get_original_url(hash_val):
     """
     Endpoint to retrieve the original URL using the short hash.
@@ -55,7 +55,7 @@ def get_original_url(hash_val):
 
 
 
-@app.route('/tinyurl/submit', methods=['POST'])
+@app.route('/tu/submit', methods=['POST'])
 def submit_url():
     """
     Endpoint to submit a URL and get a short hash.
@@ -81,7 +81,7 @@ def submit_url():
     #add the hash to the secondary set
     redis_helper.add_value_to_set(hash_val, SECONDRY_SET)
     
-    return jsonify({"tinyurl" : "https://meabhi.me/tinyurl/" + hash_val}), 201
+    return jsonify({"tinyurl" : "https://meabhi.me/tu/" + hash_val}), 201
 
 
 
