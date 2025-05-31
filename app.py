@@ -88,7 +88,8 @@ def submit_url():
     return jsonify({"tinyurl" : "https://meabhi.me/tu/" + hash_val}), 201
 
 
-
+# Gunicorn will use this
+app_wsgi = app
 
 if __name__ == '__main__':
     """
