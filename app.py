@@ -6,6 +6,7 @@ The application uses redis to store the mapping between the short hashes and the
 """
 
 from flask import Flask,request, jsonify , redirect , url_for
+from flask_cors import cross_origin  # Not CORS app-wide
 from redis_helper_kit import Helper_fun
 from hash_utils import generate_unique_hash
 
@@ -35,6 +36,7 @@ def index():
 
 
 @app.route('/tu/<hash_val>', methods=['GET'])  
+
 def get_original_url(hash_val):
     """
     Endpoint to retrieve the original URL using the short hash.
@@ -56,6 +58,7 @@ def get_original_url(hash_val):
 
 
 @app.route('/tu/submit', methods=['POST'])
+@cross_origin()  # Allow CORS on this route only
 def submit_url():
     """
     Endpoint to submit a URL and get a short hash.
