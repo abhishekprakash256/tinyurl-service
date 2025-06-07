@@ -13,7 +13,7 @@ from hash_utils import generate_unique_hash
 
 
 
-#SET REDIS CONFIGURATION
+#SET REDIS CONFIGURATION   
 REDIS_HOST = 'localhost'
 PRIMARY_SET = 'frest_hash_set'
 SECONDRY_SET = 'used_hash_set'
