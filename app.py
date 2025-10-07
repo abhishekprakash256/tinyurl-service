@@ -25,7 +25,7 @@ HASH_NAME = 'tiny_url_hash'
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route('/tu') 
 def index():
     """
     Endpoint to check if the service is running.
@@ -57,7 +57,7 @@ def get_original_url(hash_val):
 
 
 
-@app.route('/tu/submit', methods=['POST'])
+@app.route('/tu/api/v1/url/submit', methods=['POST'])
 @cross_origin()  # Allow CORS on this route only
 def submit_url():
     """
