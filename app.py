@@ -57,7 +57,8 @@ def get_original_url(hash_val):
 
 
 
-@app.route('/tu/api/v1/url/submit', methods=['POST'])
+@app.route('/tu/v1/url/submit', methods=['POST'])
+#chnage to /tu/v1/url/submit
 @cross_origin()  # Allow CORS on this route only
 def submit_url():
     """
