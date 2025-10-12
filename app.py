@@ -26,7 +26,6 @@ app = Flask(__name__)
 
 
 @app.route('/tu')
-@cross_origin() 
 def index():
     """
     Endpoint to check if the service is running.
@@ -37,7 +36,6 @@ def index():
 
 
 @app.route('/tu/<hash_val>', methods=['GET'])  
-@cross_origin()
 def get_original_url(hash_val):
     """
     Endpoint to retrieve the original URL using the short hash.
