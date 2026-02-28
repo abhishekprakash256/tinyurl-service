@@ -25,7 +25,7 @@ HASH_NAME = 'tiny_url_hash'
 app = Flask(__name__)
 
 
-@app.route('/tu')
+@app.route('/tu/')
 def index():
     """
     Endpoint to check if the service is running.
